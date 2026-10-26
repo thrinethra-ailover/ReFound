@@ -1,0 +1,814 @@
+@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  /* Personal effects stay restrained on light surfaces. */
+  --refound-effect-brightness: 0.76;
+  --refound-effect-saturation: 0.9;
+  --refound-cursor-brightness: 0.82;
+  /* ReFound design tokens */
+  --color-ink: #101826;         /* primary dark / hero bg */
+  --color-ink-soft: #1B2436;    /* secondary dark surface */
+  --color-paper: #FAF8F3;       /* app background */
+  --color-surface: #FFFFFF;     /* card surface */
+  --color-signal: #1F8A82;      /* teal - LOST / primary action */
+  --color-signal-dark: #166E67;
+  --color-beacon: #F2A93B;      /* amber - FOUND / highlight */
+  --color-beacon-dark: #C6841F;
+  --color-coral: #E2574C;       /* danger / cancel */
+  --color-coral-dark: #BE4139;
+  --color-slate: #5B6472;       /* secondary text */
+  --color-slate-light: #8B93A0;
+  --color-border: #E4E0D6;
+
+  --font-display: 'Space Grotesk', ui-sans-serif, system-ui, sans-serif;
+  --font-body: 'Inter', ui-sans-serif, system-ui, sans-serif;
+  --font-mono: 'JetBrains Mono', ui-monospace, monospace;
+}
+
+:root[data-theme='dark'] {
+  color-scheme: dark;
+  --color-ink: #edf2f8;
+  --color-ink-soft: #cbd5e1;
+  --color-paper: #111821;
+  --color-surface: #1b2430;
+  --color-slate: #bac4d1;
+  --color-slate-light: #96a2b2;
+  --color-border: #394453;
+  --refound-effect-brightness: 1.38;
+  --refound-effect-saturation: 1.24;
+  --refound-cursor-brightness: 1.32;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html, body {
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: var(--font-body);
+  background-color: var(--color-paper);
+  color: var(--color-ink);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Dark theme for the semantic palette used across pages and shared components. */
+:root[data-theme='dark'] [class~='bg-paper'] {
+  background-color: var(--color-paper);
+}
+
+:root[data-theme='dark'] [class~='bg-paper/90'] {
+  background-color: rgb(17 24 33 / 90%);
+}
+
+:root[data-theme='dark'] [class~='bg-paper/60'],
+:root[data-theme='dark'] [class~='bg-white/60'] {
+  background-color: rgb(255 255 255 / 5%);
+}
+
+:root[data-theme='dark'] [class~='bg-white'] {
+  background-color: var(--color-surface);
+}
+
+/* Keep dark filled controls distinct from the dark page background. */
+:root[data-theme='dark'] [class~='bg-ink'] {
+  background-color: #2b384a;
+}
+
+:root[data-theme='dark'] [class~='bg-ink-soft'] {
+  background-color: #344258;
+}
+
+:root[data-theme='dark'] [class~='text-ink'] {
+  color: var(--color-ink);
+}
+
+:root[data-theme='dark'] [class~='text-slate'] {
+  color: var(--color-slate);
+}
+
+:root[data-theme='dark'] [class~='text-slate-light'] {
+  color: var(--color-slate-light);
+}
+
+:root[data-theme='dark'] [class~='text-signal'],
+:root[data-theme='dark'] [class~='text-signal-dark'] {
+  color: #63cbbd;
+}
+
+:root[data-theme='dark'] [class~='text-beacon-dark'] {
+  color: #f6c36f;
+}
+
+:root[data-theme='dark'] [class~='text-coral-dark'] {
+  color: #ff8b80;
+}
+
+:root[data-theme='dark'] [class~='border-border'] {
+  border-color: var(--color-border);
+}
+
+:root[data-theme='dark'] [class*='bg-black/'] {
+  background-color: rgb(255 255 255 / 6%);
+}
+
+:root[data-theme='dark'] [role='switch'] > span {
+  background-color: #fff;
+}
+
+:root[data-theme='dark'] input::placeholder,
+:root[data-theme='dark'] textarea::placeholder {
+  color: var(--color-slate-light);
+}
+
+#root {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+h1, h2, h3, h4, .font-display {
+  font-family: var(--font-display);
+  letter-spacing: -0.01em;
+}
+
+.font-mono {
+  font-family: var(--font-mono);
+}
+
+/* Focus visibility for accessibility */
+a:focus-visible,
+button:focus-visible,
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible {
+  outline: 2px solid var(--color-signal);
+  outline-offset: 2px;
+}
+
+button:not(:disabled),
+[role='button']:not([aria-disabled='true']),
+a[class*='px-'][class*='rounded'] {
+  transform: translateZ(0);
+  transition: transform 160ms cubic-bezier(0.2, 0.75, 0.25, 1),
+    box-shadow 180ms ease, filter 180ms ease, background-color 180ms ease;
+}
+
+button:not(:disabled):hover,
+[role='button']:not([aria-disabled='true']):hover,
+a[class*='px-'][class*='rounded']:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 5px 16px rgb(16 24 38 / 14%);
+}
+
+button:not(:disabled):active,
+[role='button']:not([aria-disabled='true']):active,
+a[class*='px-'][class*='rounded']:active {
+  transform: translateY(0) scale(0.97);
+  box-shadow: 0 1px 4px rgb(16 24 38 / 16%);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* Beacon pulse - used sparingly for the landing hero signature only */
+@keyframes beacon-pulse {
+  0% { transform: scale(0.9); opacity: 0.7; }
+  70% { transform: scale(1.6); opacity: 0; }
+  100% { transform: scale(1.6); opacity: 0; }
+}
+
+.beacon-ring {
+  animation: beacon-pulse 2.8s cubic-bezier(0.2, 0.6, 0.4, 1) infinite;
+}
+
+/* Mounted by the app shell only for server-verified admin accounts. */
+.refound-admin-network {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  opacity: 1;
+}
+
+.refound-admin-cursor-layer {
+  position: fixed;
+  inset: 0;
+  z-index: 10000;
+  pointer-events: none;
+}
+
+/* Admin profile insignia banner: layered black, violet, and crimson geometry. */
+.admin-profile-insignia-card {
+  isolation: isolate;
+  border-color: rgb(168 85 247 / 42%);
+  backdrop-filter: none;
+  background:
+    radial-gradient(ellipse at 82% 52%, rgb(168 35 80 / 25%), transparent 37%),
+    radial-gradient(ellipse at 22% 12%, rgb(109 40 217 / 30%), transparent 46%),
+    linear-gradient(118deg, rgb(8 7 12 / 25%) 0%, rgb(24 13 36 / 25%) 48%, rgb(34 11 25 / 25%) 100%);
+  box-shadow: inset 0 1px rgb(255 255 255 / 9%), 0 18px 50px rgb(0 0 0 / 35%), 0 0 30px rgb(126 34 206 / 18%);
+}
+
+.admin-profile-insignia-card::before {
+  content: '';
+  position: absolute;
+  inset: -55% -25%;
+  z-index: 0;
+  pointer-events: none;
+  opacity: .75;
+  background: conic-gradient(from 20deg at 50% 50%, transparent 0 22%, rgb(168 85 247 / 24%) 29%, transparent 39% 55%, rgb(239 35 72 / 22%) 64%, transparent 73% 100%);
+  animation: admin-profile-aura 13s linear infinite;
+}
+
+.admin-profile-banner-geometry {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  overflow: hidden;
+  pointer-events: none;
+  opacity: .78;
+  background-image:
+    linear-gradient(135deg, transparent 0 47.8%, rgb(192 132 252 / 42%) 48% 48.25%, transparent 48.45%),
+    linear-gradient(45deg, transparent 0 68%, rgb(244 63 94 / 38%) 68.2% 68.45%, transparent 68.65%),
+    repeating-linear-gradient(90deg, transparent 0 46px, rgb(168 85 247 / 10%) 47px, transparent 48px 92px),
+    repeating-linear-gradient(0deg, transparent 0 38px, rgb(239 35 72 / 9%) 39px, transparent 40px 76px),
+    radial-gradient(circle at 78% 48%, rgb(236 72 153 / 23%) 0 1px, transparent 2px);
+  background-size: 180px 120px, 230px 150px, 184px 100%, 100% 152px, 20px 20px;
+  mask-image: linear-gradient(90deg, transparent, #000 20%, #000 82%, transparent);
+  animation: admin-profile-circuit-drift 22s linear infinite;
+}
+
+@keyframes admin-profile-aura { to { transform: rotate(360deg); } }
+@keyframes admin-profile-circuit-drift {
+  to { background-position: 180px 120px, -230px 150px, 184px 0, 0 152px, 20px 20px; }
+}
+
+.creator-insignia-halo {
+  animation: creator-halo-pulse 3.4s ease-in-out infinite;
+  box-shadow: 0 0 18px rgb(168 85 247 / 32%), inset 0 0 14px rgb(239 35 72 / 14%);
+}
+
+.creator-insignia-badge {
+  overflow: visible;
+  transform-style: preserve-3d;
+  filter: drop-shadow(0 0 8px rgb(192 132 252 / 78%)) drop-shadow(0 0 17px rgb(225 29 72 / 45%));
+  animation: creator-badge-flip 8s cubic-bezier(.45, 0, .55, 1) infinite, creator-badge-glow 2.8s ease-in-out infinite alternate;
+}
+
+.creator-insignia-outer,
+.creator-insignia-inner {
+  transform-box: fill-box;
+  transform-origin: center;
+}
+
+.creator-insignia-outer { animation: creator-seal-turn 24s linear infinite; }
+.creator-insignia-inner { animation: creator-seal-turn 17s linear infinite reverse; }
+.creator-insignia-orbit { transform-box: fill-box; transform-origin: center; }
+.creator-insignia-orbit-slow { animation: creator-seal-turn 18s linear infinite; }
+.creator-insignia-orbit-fast { animation: creator-seal-turn 9s linear infinite reverse; }
+
+@keyframes creator-badge-flip {
+  0%, 8% { transform: perspective(420px) rotateY(0) rotateX(0); }
+  50% { transform: perspective(420px) rotateY(180deg) rotateX(14deg) scale(.94); }
+  92%, 100% { transform: perspective(420px) rotateY(360deg) rotateX(0); }
+}
+@keyframes creator-seal-turn { to { transform: rotate(360deg); } }
+@keyframes creator-badge-glow {
+  from { filter: drop-shadow(0 0 6px rgb(192 132 252 / 58%)) drop-shadow(0 0 12px rgb(225 29 72 / 32%)); }
+  to { filter: drop-shadow(0 0 12px rgb(192 132 252 / 95%)) drop-shadow(0 0 23px rgb(225 29 72 / 62%)); }
+}
+@keyframes creator-halo-pulse {
+  50% { box-shadow: 0 0 29px rgb(168 85 247 / 55%), inset 0 0 20px rgb(239 35 72 / 24%); }
+}
+
+:root.refound-admin-theme button:not(:disabled):hover,
+:root.refound-admin-theme [role='button']:not([aria-disabled='true']):hover,
+:root.refound-admin-theme a[class*='px-'][class*='rounded']:hover {
+  transform: translateY(-3px) scale(1.035);
+  box-shadow: 0 0 0 2px rgb(216 180 254 / 72%), 0 0 22px 5px rgb(168 85 247 / 42%), 0 8px 20px rgb(239 35 72 / 30%);
+  filter: brightness(1.24) saturate(1.18);
+  transition: transform 200ms cubic-bezier(0.2, 0.8, 0.2, 1), box-shadow 200ms ease, filter 200ms ease, background-color 180ms ease;
+}
+
+:root.refound-admin-theme button:not(:disabled):active,
+:root.refound-admin-theme [role='button']:not([aria-disabled='true']):active,
+:root.refound-admin-theme a[class*='px-'][class*='rounded']:active {
+  transform: translateY(1px) scale(0.94);
+  box-shadow: inset 0 0 0 2px rgb(255 255 255 / 42%), 0 0 24px 8px rgb(239 35 72 / 46%);
+  filter: brightness(0.9) saturate(1.3);
+  transition-duration: 70ms;
+}
+
+:root.refound-admin-theme button:not(:disabled):focus-visible,
+:root.refound-admin-theme [role='button']:not([aria-disabled='true']):focus-visible,
+:root.refound-admin-theme a[class*='px-'][class*='rounded']:focus-visible {
+  outline: 3px solid #e879f9;
+  outline-offset: 3px;
+  box-shadow: 0 0 0 6px rgb(168 85 247 / 30%), 0 0 22px rgb(239 35 72 / 35%);
+}
+
+body.refound-admin-cursor-active,
+body.refound-admin-cursor-active * {
+  cursor: none !important;
+}
+
+/* Black, red, and violet palette is active only for a server-verified admin account. */
+:root.refound-admin-theme {
+  color-scheme: dark !important;
+  --color-ink: #f7f2ff;
+  --color-ink-soft: #c5b5df;
+  --color-paper: #08070c;
+  --color-surface: #141019;
+  --color-signal: #ef2348;
+  --color-signal-dark: #c8103a;
+  --color-beacon: #a855f7;
+  --color-beacon-dark: #7e22ce;
+  --color-coral: #fb3d5b;
+  --color-coral-dark: #d51b42;
+  --color-slate: #c4b9d2;
+  --color-slate-light: #9b8eaa;
+  --color-border: #38263f;
+}
+
+:root.refound-admin-theme body {
+  background-color: var(--color-paper);
+  color: var(--color-ink);
+}
+
+:root.refound-admin-theme [class~='bg-paper'] { background-color: var(--color-paper); }
+:root.refound-admin-theme [class*='bg-paper/'] { background-color: rgb(8 7 12 / 70%); }
+:root.refound-admin-theme [class~='bg-paper/90'] { background-color: rgb(8 7 12 / 90%); }
+:root.refound-admin-theme [class~='bg-paper/60'] { background-color: rgb(8 7 12 / 60%); }
+:root.refound-admin-theme [class~='bg-white'] { background-color: var(--color-surface); }
+:root.refound-admin-theme [class*='bg-white/'] { background-color: rgb(20 16 25 / 76%); }
+:root.refound-admin-theme [class~='bg-white/90'] { background-color: rgb(20 16 25 / 90%); }
+:root.refound-admin-theme [class~='bg-white/80'] { background-color: rgb(20 16 25 / 80%); }
+:root.refound-admin-theme [class~='bg-white/60'] { background-color: rgb(20 16 25 / 60%); }
+:root.refound-admin-theme [class~='bg-ink'] { background-color: #1d1425; }
+:root.refound-admin-theme [class~='bg-ink-soft'] { background-color: #291a34; }
+:root.refound-admin-theme [class~='bg-signal'] { background-color: #ef2348; }
+:root.refound-admin-theme [class~='bg-signal-dark'] { background-color: #c8103a; }
+:root.refound-admin-theme [class~='bg-beacon'] { background-color: #a855f7; }
+:root.refound-admin-theme [class~='bg-beacon-dark'] { background-color: #7e22ce; }
+:root.refound-admin-theme [class~='bg-coral'] { background-color: #fb3d5b; }
+:root.refound-admin-theme [class~='bg-coral-dark'] { background-color: #d51b42; }
+:root.refound-admin-theme [class~='bg-slate'] { background-color: #6b5a78; }
+:root.refound-admin-theme [class~='bg-border'] { background-color: #38263f; }
+:root.refound-admin-theme [class*='bg-signal/'] { background-color: rgb(239 35 72 / 14%); }
+:root.refound-admin-theme [class*='bg-beacon/'] { background-color: rgb(168 85 247 / 15%); }
+:root.refound-admin-theme [class*='bg-coral/'] { background-color: rgb(251 61 91 / 14%); }
+:root.refound-admin-theme [class*='bg-ink/'] { background-color: rgb(29 20 37 / 72%); }
+:root.refound-admin-theme [class~='text-ink'] { color: var(--color-ink); }
+:root.refound-admin-theme [class~='text-slate'] { color: var(--color-slate); }
+:root.refound-admin-theme [class~='text-slate-light'] { color: var(--color-slate-light); }
+:root.refound-admin-theme [class~='text-signal'],
+:root.refound-admin-theme [class~='text-signal-dark'] { color: #ff4969; }
+:root.refound-admin-theme [class~='text-beacon'],
+:root.refound-admin-theme [class~='text-beacon-dark'] { color: #c084fc; }
+:root.refound-admin-theme [class~='text-coral'],
+:root.refound-admin-theme [class~='text-coral-dark'] { color: #ff627b; }
+:root.refound-admin-theme [class~='border-border'] { border-color: var(--color-border); }
+:root.refound-admin-theme [class~='border-signal'] { border-color: #ef2348; }
+:root.refound-admin-theme [class~='border-beacon'] { border-color: #a855f7; }
+:root.refound-admin-theme [class~='border-coral'] { border-color: #fb3d5b; }
+:root.refound-admin-theme [class*='border-signal/'] { border-color: rgb(239 35 72 / 48%); }
+:root.refound-admin-theme [class*='border-beacon/'] { border-color: rgb(168 85 247 / 48%); }
+:root.refound-admin-theme [class~='hover:bg-signal-dark']:hover { background-color: #c8103a; }
+:root.refound-admin-theme [class~='hover:bg-ink']:hover { background-color: #1d1425; }
+:root.refound-admin-theme [class~='hover:text-signal']:hover { color: #ff4969; }
+:root.refound-admin-theme [class~='hover:text-coral']:hover { color: #ff627b; }
+:root.refound-admin-theme [class~='hover:border-signal']:hover { border-color: #ef2348; }
+:root.refound-admin-theme input::placeholder,
+:root.refound-admin-theme textarea::placeholder { color: var(--color-slate-light); }
+
+/* Admin surfaces use translucent glass over the ambient network. */
+:root.refound-admin-theme [class~='bg-paper'] { background-color: rgb(8 7 12 / 1%); }
+:root.refound-admin-theme [class*='bg-paper/'] { background-color: rgb(8 7 12 / 1%); }
+:root.refound-admin-theme [class~='bg-paper/90'] { background-color: rgb(8 7 12 / 1%); }
+:root.refound-admin-theme [class~='bg-paper/60'] { background-color: rgb(8 7 12 / 1%); }
+:root.refound-admin-theme [class~='bg-white'] { background-color: rgb(24 17 32 / 1%); }
+:root.refound-admin-theme [class*='bg-white/'] { background-color: rgb(24 17 32 / 1%); }
+:root.refound-admin-theme [class~='bg-white/90'] { background-color: rgb(24 17 32 / 1%); }
+:root.refound-admin-theme [class~='bg-white/80'] { background-color: rgb(24 17 32 / 1%); }
+:root.refound-admin-theme [class~='bg-white/60'] { background-color: rgb(24 17 32 / 1%); }
+:root.refound-admin-theme [class~='bg-ink'] { background-color: rgb(29 20 37 / 1%); }
+:root.refound-admin-theme [class~='bg-ink-soft'] { background-color: rgb(41 26 52 / 1%); }
+:root.refound-admin-theme [class~='bg-paper'],
+:root.refound-admin-theme [class*='bg-paper/'],
+:root.refound-admin-theme [class~='bg-white'],
+:root.refound-admin-theme [class*='bg-white/'],
+:root.refound-admin-theme [class~='bg-ink'],
+:root.refound-admin-theme [class~='bg-ink-soft'] {
+  -webkit-backdrop-filter: blur(0) saturate(135%);
+  backdrop-filter: blur(0) saturate(135%);
+  border-color: rgb(216 180 254 / 22%);
+}
+:root.refound-admin-theme input,
+:root.refound-admin-theme select,
+:root.refound-admin-theme textarea {
+  background-color: rgb(13 10 18 / 66%);
+  border-color: rgb(216 180 254 / 28%);
+  -webkit-backdrop-filter: blur(12px);
+  backdrop-filter: blur(12px);
+}
+
+:root.refound-admin-theme .admin-report-details-row {
+  background-color: rgb(24 17 32 / 1%);
+  -webkit-backdrop-filter: blur(0) saturate(135%);
+  backdrop-filter: blur(0) saturate(135%);
+}
+
+/* Plus profile accents theme shared user-facing controls and surfaces. */
+:root[data-profile-accent='TEAL'] { --profile-accent: #0f766e; --profile-accent-hover: #115e59; --profile-accent-rgb: 15 118 110; }
+:root[data-profile-accent='GREEN'] { --profile-accent: #15803d; --profile-accent-hover: #166534; --profile-accent-rgb: 21 128 61; }
+:root[data-profile-accent='LIME'] { --profile-accent: #4d7c0f; --profile-accent-hover: #3f6212; --profile-accent-rgb: 77 124 15; }
+:root[data-profile-accent='CYAN'] { --profile-accent: #0e7490; --profile-accent-hover: #155e75; --profile-accent-rgb: 14 116 144; }
+:root[data-profile-accent='BLUE'] { --profile-accent: #2563eb; --profile-accent-hover: #1d4ed8; --profile-accent-rgb: 37 99 235; }
+:root[data-profile-accent='INDIGO'] { --profile-accent: #4338ca; --profile-accent-hover: #3730a3; --profile-accent-rgb: 67 56 202; }
+:root[data-profile-accent='VIOLET'] { --profile-accent: #7c3aed; --profile-accent-hover: #6d28d9; --profile-accent-rgb: 124 58 237; }
+:root[data-profile-accent='PURPLE'] { --profile-accent: #7e22ce; --profile-accent-hover: #6b21a8; --profile-accent-rgb: 126 34 206; }
+:root[data-profile-accent='PINK'] { --profile-accent: #be185d; --profile-accent-hover: #9d174d; --profile-accent-rgb: 190 24 93; }
+:root[data-profile-accent='ROSE'] { --profile-accent: #e11d48; --profile-accent-hover: #be123c; --profile-accent-rgb: 225 29 72; }
+:root[data-profile-accent='RED'] { --profile-accent: #b91c1c; --profile-accent-hover: #991b1b; --profile-accent-rgb: 185 28 28; }
+:root[data-profile-accent='ORANGE'] { --profile-accent: #c2410c; --profile-accent-hover: #9a3412; --profile-accent-rgb: 194 65 12; }
+:root[data-profile-accent='AMBER'] { --profile-accent: #b45309; --profile-accent-hover: #92400e; --profile-accent-rgb: 180 83 9; }
+:root[data-profile-accent='YELLOW'] { --profile-accent: #a16207; --profile-accent-hover: #854d0e; --profile-accent-rgb: 161 98 7; }
+
+:root[data-profile-accent] body {
+  background-color: color-mix(in srgb, var(--color-paper) 96%, var(--profile-accent));
+}
+:root[data-profile-accent] [class~='bg-signal'] { background-color: var(--profile-accent); }
+:root[data-profile-accent] [class~='profile-accent-nav'] { background-color: var(--profile-accent); }
+:root[data-profile-accent] [class~='bg-signal-dark'] { background-color: var(--profile-accent-hover); }
+:root[data-profile-accent] [class*='bg-signal/'] { background-color: rgb(var(--profile-accent-rgb) / 12%); }
+:root[data-profile-accent] [class~='text-signal'],
+:root[data-profile-accent] [class~='text-signal-dark'] { color: var(--profile-accent); }
+:root[data-profile-accent] [class~='border-signal'] { border-color: var(--profile-accent); }
+:root[data-profile-accent] [class*='border-signal/'] { border-color: rgb(var(--profile-accent-rgb) / 42%); }
+:root[data-profile-accent] [class~='hover:bg-signal-dark']:hover { background-color: var(--profile-accent-hover); }
+:root[data-profile-accent] [class~='hover:text-signal']:hover { color: var(--profile-accent-hover); }
+:root[data-profile-accent] [class~='focus:border-signal']:focus { border-color: var(--profile-accent); }
+:root[data-profile-accent] a:focus-visible,
+:root[data-profile-accent] button:focus-visible,
+:root[data-profile-accent] input:focus-visible,
+:root[data-profile-accent] select:focus-visible,
+:root[data-profile-accent] textarea:focus-visible { outline-color: var(--profile-accent); }
+:root[data-profile-accent] [class~='rounded-card'][class~='border-border']:not(.profile-settings-form),
+:root[data-profile-accent] section[class~='rounded-xl'][class~='border-border'],
+:root[data-profile-accent] article[class~='rounded-xl'][class~='border-border'] {
+  border-color: rgb(var(--profile-accent-rgb) / 30%);
+  box-shadow: 0 8px 26px rgb(var(--profile-accent-rgb) / 7%);
+}
+:root[data-profile-accent] .landing-hero-orbit {
+  border-color: rgb(var(--profile-accent-rgb) / 60%);
+  box-shadow: 0 0 22px rgb(var(--profile-accent-rgb) / 14%);
+}
+:root[data-profile-accent] .landing-hero-pin {
+  background-color: var(--profile-accent);
+  color: #fff;
+  box-shadow: 0 18px 44px rgb(var(--profile-accent-rgb) / 30%);
+}
+
+/* Optional ReFound+ atmosphere, mounted beneath app content. */
+.refound-user-ambience {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  overflow: hidden;
+  pointer-events: none;
+  opacity: 0.5;
+  filter: brightness(var(--refound-effect-brightness)) saturate(var(--refound-effect-saturation));
+}
+.refound-user-ambience[data-effect='aurora'] {
+  background:
+    linear-gradient(112deg, transparent 10%, color-mix(in srgb, var(--profile-accent, #0f766e) 42%, transparent) 34%, transparent 56%),
+    linear-gradient(72deg, transparent 38%, color-mix(in srgb, var(--profile-accent, #0f766e) 32%, transparent) 58%, transparent 78%),
+    linear-gradient(148deg, transparent 50%, color-mix(in srgb, var(--profile-accent, #0f766e) 25%, transparent) 68%, transparent 88%);
+  background-size: 230% 180%;
+  animation: refound-aurora-drift 12s ease-in-out infinite alternate;
+}
+.refound-user-ambience[data-effect='stardust'] {
+  opacity: 0.5;
+  background-image:
+    radial-gradient(circle, var(--profile-accent, #0f766e) 1.5px, transparent 2.3px),
+    radial-gradient(circle, color-mix(in srgb, var(--profile-accent, #0f766e) 45%, white) 1.2px, transparent 2.1px);
+  background-size: 58px 58px, 91px 91px;
+  background-position: 0 0, 32px 48px;
+  animation: refound-stardust-drift 14s linear infinite;
+}
+.refound-user-ambience[data-effect='circuit'] {
+  opacity: 1;
+}
+.refound-user-ambience[data-effect='ember'] {
+  opacity: 0.62;
+  filter: brightness(calc(var(--refound-effect-brightness) * 1.3)) saturate(calc(var(--refound-effect-saturation) * 1.25));
+  background-image:
+    radial-gradient(circle, color-mix(in srgb, var(--profile-accent, #0f766e) 76%, white) 2.4px, transparent 4px),
+    radial-gradient(circle, color-mix(in srgb, #fb923c 48%, var(--profile-accent, #0f766e)) 3px, transparent 5px),
+    radial-gradient(ellipse at 22% 90%, color-mix(in srgb, #fb923c 54%, var(--profile-accent, #0f766e)), transparent 38%);
+  background-size: 91px 117px, 149px 163px, 100% 150%;
+  background-position: 0 0, 58px 43px, 0% 100%;
+  animation: refound-ember-drift 8s linear infinite;
+}
+.refound-user-ambience[data-effect='prism'] {
+  opacity: 0.3;
+  background:
+    radial-gradient(ellipse at 12% 28%, color-mix(in srgb, var(--profile-accent, #0f766e) 58%, #a855f7 42%), transparent 38%),
+    radial-gradient(ellipse at 84% 24%, color-mix(in srgb, var(--profile-accent, #0f766e) 58%, #06b6d4 42%), transparent 36%),
+    radial-gradient(ellipse at 60% 82%, color-mix(in srgb, var(--profile-accent, #0f766e) 68%, transparent), transparent 42%);
+  background-size: 150% 150%;
+  animation: refound-aurora-drift 10s ease-in-out infinite alternate-reverse;
+}
+.refound-user-ambience[data-effect='neon_grid'] {
+  opacity: 0.36;
+  background-image:
+    repeating-linear-gradient(0deg, transparent 0 35px, color-mix(in srgb, var(--profile-accent, #0f766e) 76%, white) 36px 37px, transparent 38px 72px),
+    repeating-linear-gradient(90deg, transparent 0 35px, color-mix(in srgb, var(--profile-accent, #0f766e) 76%, white) 36px 37px, transparent 38px 72px),
+    radial-gradient(circle, white 1.5px, transparent 2.5px);
+  background-size: 72px 72px, 72px 72px, 144px 144px;
+  background-position: 0 0, 0 0, 36px 36px;
+  animation: refound-neon-grid 7s linear infinite;
+}
+.refound-user-ambience[data-effect='deep_space'] {
+  opacity: 0.45;
+  background-image:
+    radial-gradient(circle, white 2.4px, transparent 3.4px),
+    radial-gradient(circle, color-mix(in srgb, var(--profile-accent, #0f766e) 74%, white) 3px, transparent 4px),
+    radial-gradient(ellipse at 18% 35%, color-mix(in srgb, var(--profile-accent, #0f766e) 62%, #7c3aed 38%), transparent 40%),
+    radial-gradient(ellipse at 82% 68%, color-mix(in srgb, var(--profile-accent, #0f766e) 58%, #06b6d4 42%), transparent 42%);
+  background-size: 307px 269px, 421px 353px, 150% 150%, 150% 150%;
+  background-position: 0 0, 148px 137px, 0 0, 100% 100%;
+  animation: refound-deep-space 13s ease-in-out infinite alternate;
+}
+.refound-user-ambience[data-effect='solar_flare'] {
+  opacity: 0.44;
+  background-image:
+    radial-gradient(ellipse at 22% 78%, color-mix(in srgb, var(--profile-accent, #0f766e) 58%, #f97316 42%), transparent 38%),
+    radial-gradient(ellipse at 78% 25%, color-mix(in srgb, var(--profile-accent, #0f766e) 58%, #facc15 42%), transparent 35%),
+    radial-gradient(ellipse at 50% 50%, color-mix(in srgb, var(--profile-accent, #0f766e) 62%, transparent), transparent 56%);
+  background-size: 170% 170%;
+  animation: refound-solar-sweep 8s ease-in-out infinite alternate;
+}
+.refound-user-ambience[data-effect='petals'] {
+  opacity: 0.4;
+  background-image:
+    radial-gradient(ellipse 4px 9px at 20px 16px, color-mix(in srgb, var(--profile-accent, #0f766e) 72%, #fb7185 28%) 35%, transparent 85%),
+    radial-gradient(ellipse 4px 9px at 55px 60px, color-mix(in srgb, var(--profile-accent, #0f766e) 72%, #c084fc 28%) 35%, transparent 85%),
+    radial-gradient(ellipse 4px 9px at 85px 28px, color-mix(in srgb, var(--profile-accent, #0f766e) 76%, white) 35%, transparent 85%);
+  background-size: 112px 97px, 157px 143px, 193px 167px;
+  animation: refound-petal-fall 9s linear infinite;
+}
+.refound-user-ambience[data-effect='electric'] {
+  opacity: 0.75;
+}
+.refound-user-ambience[data-effect='electric']::before,
+.refound-user-ambience[data-effect='electric']::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(90deg, transparent, color-mix(in srgb, var(--profile-accent, #0f766e) 72%, white) 48%, color-mix(in srgb, #22d3ee 58%, var(--profile-accent, #0f766e)) 52%, transparent);
+  background-size: 220% 100%;
+  filter: drop-shadow(0 0 9px var(--profile-accent, #0f766e)) drop-shadow(0 0 20px color-mix(in srgb, var(--profile-accent, #0f766e) 72%, transparent));
+  clip-path: polygon(0 31%, 15% 31%, 19% 27%, 22% 36%, 26% 36%, 31% 17%, 35% 49%, 40% 34%, 47% 34%, 52% 39%, 58% 19%, 62% 53%, 68% 29%, 75% 29%, 79% 41%, 84% 23%, 89% 23%, 94% 46%, 100% 46%, 100% 48%, 94% 48%, 89% 25%, 84% 25%, 79% 43%, 75% 31%, 68% 31%, 62% 57%, 58% 22%, 52% 41%, 47% 36%, 40% 36%, 35% 54%, 31% 21%, 26% 38%, 22% 38%, 19% 30%, 16% 33%, 0 33%);
+  animation: refound-electric-strike 3.2s ease-in-out infinite;
+}
+.refound-user-ambience[data-effect='electric']::after {
+  opacity: 0.72;
+  transform: translateY(24%);
+  clip-path: polygon(0 31%, 12% 31%, 16% 27%, 19% 36%, 23% 36%, 28% 17%, 32% 49%, 37% 34%, 44% 34%, 49% 39%, 55% 19%, 59% 53%, 65% 29%, 72% 29%, 76% 41%, 81% 23%, 86% 23%, 91% 46%, 100% 46%, 100% 48%, 91% 48%, 86% 25%, 81% 25%, 76% 43%, 72% 31%, 65% 31%, 59% 57%, 55% 22%, 49% 41%, 44% 36%, 37% 36%, 32% 54%, 28% 21%, 23% 38%, 19% 38%, 16% 30%, 13% 33%, 0 33%);
+  animation-delay: -1.6s;
+}
+@keyframes refound-aurora-drift {
+  from { background-position: 0% 0%, 100% 100%, 50% 50%; }
+  to { background-position: 100% 0%, 0% 100%, 35% 80%; }
+}
+@keyframes refound-stardust-drift {
+  to { background-position: 58px 58px, 123px 139px; }
+}
+@keyframes refound-ember-drift {
+  to { background-position: 91px -234px, -91px -326px, 100% 0%; }
+}
+@keyframes refound-neon-grid { to { background-position: 72px 72px, -72px -72px, 108px 108px; } }
+@keyframes refound-deep-space { to { background-position: 307px 269px, -421px 353px, 35% 22%, 65% 78%; } }
+@keyframes refound-solar-sweep { to { background-position: 100% 100%, 0% 0%, 55% 40%; } }
+@keyframes refound-petal-fall { to { background-position: 56px 97px, -78px 143px, 96px 167px; } }
+@keyframes refound-electric-strike {
+  0%, 100% { opacity: 0.34; background-position: 0% 50%; filter: brightness(0.9) drop-shadow(0 0 6px var(--profile-accent, #0f766e)); }
+  45% { opacity: 0.95; background-position: 75% 50%; filter: brightness(1.75) drop-shadow(0 0 18px var(--profile-accent, #0f766e)); }
+  55% { opacity: 0.58; background-position: 100% 50%; filter: brightness(1.2) drop-shadow(0 0 10px var(--profile-accent, #0f766e)); }
+}
+
+/* Custom cursor substitutes are enabled only for fine-pointer devices. */
+@media (hover: hover) and (pointer: fine) {
+  :root[data-custom-cursor] body,
+  :root[data-custom-cursor] body * { cursor: none !important; }
+  .refound-custom-cursor-position {
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 10001;
+    width: 0;
+    height: 0;
+    opacity: 0;
+    filter: brightness(var(--refound-cursor-brightness));
+    pointer-events: none;
+    will-change: transform;
+    transition: opacity 140ms ease, transform 48ms cubic-bezier(0.2, 0.8, 0.25, 1);
+  }
+  .refound-custom-cursor-position[data-visible='true'] { opacity: 1; }
+  .refound-custom-cursor-position[data-interactive='true'] .refound-custom-cursor { scale: 1.16; }
+  .refound-custom-cursor-position[data-pressed='true'] .refound-custom-cursor { scale: 0.72; filter: brightness(1.55); }
+  .refound-custom-cursor {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 34px;
+    height: 34px;
+    border-radius: 50%;
+    pointer-events: none;
+    scale: 1;
+    transform: translate(-50%, -50%);
+    transition: width 180ms ease, height 180ms ease, scale 160ms cubic-bezier(0.2, 0.8, 0.25, 1), filter 160ms ease;
+  }
+  .refound-custom-cursor-halo {
+    border: 1px solid color-mix(in srgb, var(--profile-accent, #0f766e) 78%, white);
+    box-shadow: 0 0 0 5px color-mix(in srgb, var(--profile-accent, #0f766e) 22%, transparent), 0 0 25px color-mix(in srgb, var(--profile-accent, #0f766e) 64%, transparent);
+    transform: translate3d(-50%, -50%, 0);
+    animation: refound-halo-breathe 2.4s ease-in-out infinite;
+  }
+  .refound-custom-cursor-halo::before {
+    content: '';
+    position: absolute;
+    left: calc(50% - 2.5px);
+    top: -3px;
+    width: 5px;
+    height: 5px;
+    border-radius: 50%;
+    background: color-mix(in srgb, var(--profile-accent, #0f766e) 70%, white);
+    box-shadow: 0 0 9px var(--profile-accent, #0f766e);
+    transform-origin: 2.5px 20px;
+    animation: refound-halo-orbit 3.2s linear infinite;
+  }
+  .refound-custom-cursor-halo::after {
+    content: '';
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    width: 4px;
+    height: 4px;
+    border-radius: 50%;
+    background: var(--profile-accent, #0f766e);
+    transform: translate(-50%, -50%);
+  }
+  .refound-custom-cursor-glow {
+    width: 28px;
+    height: 28px;
+    background: radial-gradient(circle, color-mix(in srgb, var(--profile-accent, #0f766e) 72%, white), color-mix(in srgb, var(--profile-accent, #0f766e) 54%, transparent) 34%, transparent 76%);
+    filter: drop-shadow(0 0 15px color-mix(in srgb, var(--profile-accent, #0f766e) 72%, transparent));
+    transform: translate3d(-50%, -50%, 0);
+    animation: refound-glow-breathe 1.8s ease-in-out infinite alternate;
+  }
+  .refound-custom-cursor-orbit {
+    width: 38px;
+    height: 30px;
+    border: 1px solid color-mix(in srgb, var(--profile-accent, #0f766e) 68%, transparent);
+    border-radius: 50%;
+    box-shadow: 0 0 14px color-mix(in srgb, var(--profile-accent, #0f766e) 48%, transparent);
+    animation: refound-orbit-breathe 2.6s ease-in-out infinite alternate;
+  }
+  .refound-custom-cursor-orbit::before,
+  .refound-custom-cursor-orbit::after {
+    content: '';
+    position: absolute;
+    left: calc(50% - 3px);
+    top: -3px;
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: color-mix(in srgb, var(--profile-accent, #0f766e) 62%, white);
+    box-shadow: 0 0 10px var(--profile-accent, #0f766e);
+    transform-origin: 3px 18px;
+    animation: refound-halo-orbit 2.8s linear infinite;
+  }
+  .refound-custom-cursor-orbit::after { animation-delay: -1.4s; background: white; }
+  .refound-custom-cursor-spark::before {
+    content: '';
+    position: absolute;
+    inset: -3px;
+    background: linear-gradient(145deg, white, color-mix(in srgb, var(--profile-accent, #0f766e) 68%, white));
+    clip-path: polygon(50% 0%, 62% 38%, 100% 50%, 62% 62%, 50% 100%, 38% 62%, 0 50%, 38% 38%);
+    filter: drop-shadow(0 0 6px var(--profile-accent, #0f766e));
+    animation: refound-spark-turn 4s linear infinite;
+  }
+  .refound-custom-cursor-spark::after {
+    content: '';
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    width: 5px;
+    height: 5px;
+    border-radius: 50%;
+    background: white;
+    box-shadow: 0 0 12px 4px color-mix(in srgb, var(--profile-accent, #0f766e) 72%, transparent);
+    transform: translate(-50%, -50%);
+  }
+  .refound-custom-cursor-trail {
+    width: 14px;
+    height: 14px;
+    background: radial-gradient(circle, white 0 16%, color-mix(in srgb, var(--profile-accent, #0f766e) 94%, white) 28%, color-mix(in srgb, var(--profile-accent, #0f766e) 48%, transparent) 62%, transparent 78%);
+    box-shadow: -8px 0 15px color-mix(in srgb, var(--profile-accent, #0f766e) 64%, transparent), -15px 0 22px color-mix(in srgb, var(--profile-accent, #0f766e) 38%, transparent);
+    animation: refound-glow-breathe 1.1s ease-in-out infinite alternate;
+  }
+  .refound-custom-cursor-diamond::before {
+    content: '';
+    position: absolute;
+    inset: 5px;
+    border: 2px solid color-mix(in srgb, var(--profile-accent, #0f766e) 72%, white);
+    border-radius: 3px;
+    box-shadow: 0 0 14px color-mix(in srgb, var(--profile-accent, #0f766e) 82%, transparent), inset 0 0 7px color-mix(in srgb, var(--profile-accent, #0f766e) 58%, transparent);
+    animation: refound-diamond-turn 3s linear infinite;
+  }
+  .refound-custom-cursor-pulse::before {
+    content: '';
+    position: absolute;
+    inset: 2px;
+    border: 2px solid color-mix(in srgb, var(--profile-accent, #0f766e) 84%, white);
+    border-radius: 50%;
+    box-shadow: 0 0 0 5px color-mix(in srgb, var(--profile-accent, #0f766e) 28%, transparent), 0 0 20px color-mix(in srgb, var(--profile-accent, #0f766e) 78%, transparent);
+    animation: refound-pulse-ring 1.25s ease-out infinite;
+  }
+  .refound-custom-cursor-constellation::before {
+    content: '';
+    position: absolute;
+    left: 50%; top: 50%; width: 5px; height: 5px; border-radius: 50%;
+    background: white;
+    box-shadow: 0 -13px 0 1px #fff, 12px -5px 0 1px color-mix(in srgb, var(--profile-accent, #0f766e) 70%, white), 8px 10px 0 1px #fff, -9px 9px 0 1px color-mix(in srgb, var(--profile-accent, #0f766e) 75%, white), -12px -5px 0 1px #fff;
+    filter: drop-shadow(0 0 5px var(--profile-accent, #0f766e));
+    animation: refound-constellation-twinkle 1.8s ease-in-out infinite alternate;
+  }
+  .refound-custom-cursor-crosshair::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(transparent 46%, white 49% 51%, transparent 54%), linear-gradient(90deg, transparent 46%, color-mix(in srgb, var(--profile-accent, #0f766e) 82%, white) 49% 51%, transparent 54%);
+    filter: drop-shadow(0 0 8px var(--profile-accent, #0f766e));
+    animation: refound-crosshair-pulse 1.6s ease-in-out infinite alternate;
+  }
+  .refound-custom-cursor-comet::before {
+    content: '';
+    position: absolute;
+    left: 2px; top: 50%; width: 34px; height: 8px;
+    border-radius: 100%;
+    background: linear-gradient(90deg, transparent, color-mix(in srgb, var(--profile-accent, #0f766e) 78%, transparent) 45%, white);
+    filter: drop-shadow(0 0 9px var(--profile-accent, #0f766e));
+    transform: translateY(-50%) rotate(-28deg);
+    animation: refound-comet-flicker 850ms ease-in-out infinite alternate;
+  }
+  .refound-custom-cursor-comet::after {
+    content: '';
+    position: absolute; left: 50%; top: 50%; width: 7px; height: 7px; border-radius: 50%;
+    background: white; box-shadow: 0 0 12px 4px var(--profile-accent, #0f766e);
+    transform: translate(-50%, -50%);
+  }
+}
+@keyframes refound-halo-orbit { to { transform: rotate(360deg); } }
+@keyframes refound-spark-turn { to { transform: rotate(90deg) scale(0.82); } }
+@keyframes refound-orbit-breathe {
+  from { box-shadow: 0 0 9px color-mix(in srgb, var(--profile-accent, #0f766e) 38%, transparent); }
+  to { box-shadow: 0 0 22px color-mix(in srgb, var(--profile-accent, #0f766e) 78%, transparent); }
+}
+@keyframes refound-crosshair-pulse { from { opacity: 0.68; scale: 0.86; } to { opacity: 1; scale: 1.12; } }
+@keyframes refound-halo-breathe {
+  50% { box-shadow: 0 0 0 7px color-mix(in srgb, var(--profile-accent, #0f766e) 9%, transparent), 0 0 27px color-mix(in srgb, var(--profile-accent, #0f766e) 55%, transparent); }
+}
+@keyframes refound-glow-breathe {
+  from { opacity: 0.58; filter: drop-shadow(0 0 7px color-mix(in srgb, var(--profile-accent, #0f766e) 35%, transparent)); }
+  to { opacity: 1; filter: drop-shadow(0 0 15px color-mix(in srgb, var(--profile-accent, #0f766e) 68%, transparent)); }
+}
+@keyframes refound-diamond-turn { to { transform: rotate(360deg); } }
+@keyframes refound-pulse-ring { 0% { transform: scale(0.45); opacity: 1; } 100% { transform: scale(1.45); opacity: 0; } }
+@keyframes refound-constellation-twinkle { to { opacity: 0.62; filter: brightness(1.8) drop-shadow(0 0 8px var(--profile-accent, #0f766e)); } }
+@keyframes refound-comet-flicker { to { opacity: 0.72; filter: brightness(1.7) drop-shadow(0 0 14px var(--profile-accent, #0f766e)); } }
+
+@media (prefers-reduced-motion: reduce) {
+  .refound-user-ambience,
+  .refound-custom-cursor-position,
+  .refound-custom-cursor,
+  .refound-custom-cursor::before,
+  .refound-custom-cursor::after { animation: none !important; transition: none !important; }
+}
